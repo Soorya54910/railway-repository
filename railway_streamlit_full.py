@@ -26,10 +26,12 @@ import pandas as pd
 import io
 import os
 import base64
-SECRET_KEY = "SOORYA123"   # ⚠️ SAME as Node.js JWT secret
+SECRET_KEY = "soorya123"   # ⚠️ SAME as Node.js JWT secret
 
 query_params = st.query_params
 token = query_params.get("token")
+if isinstance(token, list):
+    token = token[0]
 
 if not token:
     st.error("🚫 Unauthorized access. Please login from the website.")
@@ -37,7 +39,7 @@ if not token:
 
 try:
     decoded = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    username = decoded.get("user", {}).get("username", "User")
+    username = decoded.get("username", {}).get("username", "username")
     st.success(f"✅ Welcome {username}")
 except:
     st.error("🚫 Session expired or invalid. Please login again.")
