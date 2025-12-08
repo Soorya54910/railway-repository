@@ -34,13 +34,20 @@ if isinstance(token, list):
     token = token[0]
 
 if not token:
-    st.error("🚫 Unauthorized access. Please login from the website.")
+    login_url = "https://railways-r1m.onrender.com/login"
+    st.markdown(
+        f"""
+        <meta http-equiv="refresh" content="0; url={login_url}">
+        """,
+        unsafe_allow_html=True
+    )
     st.stop()
 
 try:
     decoded = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     username = decoded.get("user", {}).get("username", "User")
     st.success(f"✅ Welcome {username}")
+    st.query_params.clear()
 except:
     st.error("🚫 Session expired or invalid. Please login again.")
     st.stop()
